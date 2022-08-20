@@ -76,7 +76,7 @@ class ProjectState extends State<Project> {
     private static instance: ProjectState
 
     constructor() {
-     super()
+        super()
     }
 
     static getInstance() {
@@ -101,7 +101,7 @@ class ProjectState extends State<Project> {
         }
     }
 
-  
+
 }
 
 const projectState = ProjectState.getInstance()
@@ -217,6 +217,29 @@ class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
 const project = new ProjectInput()
 
 
+class PrjectItem extends Component<HTMLUListElement, HTMLLIElement>{
+    private project: Project
+
+    constructor(hostId: string, project: Project) {
+        super('single-project', hostId, false, project.id)
+        this.project = project
+        this.renderContent()
+        this.configure()
+    }
+
+    renderContent(): void {
+        this.element.querySelector('h2')!.textContent = this.project.title
+        this.element.querySelector('h3')!.textContent = this.project.people.toString()
+        this.element.querySelector('p')!.textContent = this.project.description
+    }
+
+    configure(): void {
+
+
+    }
+
+}
+
 class ProjectList extends Component<HTMLDivElement, HTMLElement>{
 
     assignedProject: Project[] = []
@@ -232,9 +255,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement>{
         const listEl = document.getElementById(`${this.type}-projects-list`)! as HTMLUListElement
         listEl.innerHTML = ''
         for (const item of this.assignedProject) {
-            const itemDetails = document.createElement('li')
-            itemDetails.textContent = item.title
-            listEl?.appendChild(itemDetails)
+            new PrjectItem(this.element.querySelector('ul')!.id, item)
         }
     }
 
