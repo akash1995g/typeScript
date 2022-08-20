@@ -10,6 +10,15 @@ class Project {
     ) { }
 }
 
+// drag and drop interface
+interface Draggable {
+
+}
+
+interface DragTarget{
+
+}
+
 
 
 // decorator
