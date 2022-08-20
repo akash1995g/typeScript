@@ -61,15 +61,22 @@ function validate(validatableInput: Validatable) {
     return valid
 }
 
-type Listener = (items: Project[]) => void
+type Listener<T> = (items: T[]) => void
 
-class ProjectState {
-    private listeners: Listener[] = []
+class State<T>{
+    protected listeners: Listener<T>[] = []
+
+    addListener(listenerFun: Listener<T>) {
+        this.listeners.push(listenerFun)
+    }
+}
+
+class ProjectState extends State<Project> {
     private project: Project[] = []
     private static instance: ProjectState
 
     constructor() {
-
+     super()
     }
 
     static getInstance() {
@@ -94,9 +101,7 @@ class ProjectState {
         }
     }
 
-    addListener(listenerFun: Listener) {
-        this.listeners.push(listenerFun)
-    }
+  
 }
 
 const projectState = ProjectState.getInstance()

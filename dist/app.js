@@ -52,9 +52,17 @@ function validate(validatableInput) {
     }
     return valid;
 }
-class ProjectState {
+class State {
     constructor() {
         this.listeners = [];
+    }
+    addListener(listenerFun) {
+        this.listeners.push(listenerFun);
+    }
+}
+class ProjectState extends State {
+    constructor() {
+        super();
         this.project = [];
     }
     static getInstance() {
@@ -73,9 +81,6 @@ class ProjectState {
         for (const listener of this.listeners) {
             listener(this.project.slice());
         }
-    }
-    addListener(listenerFun) {
-        this.listeners.push(listenerFun);
     }
 }
 const projectState = ProjectState.getInstance();
