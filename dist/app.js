@@ -5,6 +5,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var ProjectStatus;
+(function (ProjectStatus) {
+    ProjectStatus[ProjectStatus["Active"] = 0] = "Active";
+    ProjectStatus[ProjectStatus["Finished"] = 1] = "Finished";
+})(ProjectStatus || (ProjectStatus = {}));
+class Project {
+    constructor(id, title, description, people, projectStatus) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.people = people;
+        this.projectStatus = projectStatus;
+    }
+}
 // decorator
 function autobind(target, methodName, descriptor) {
     const originalMethod = descriptor.value;
@@ -53,12 +67,7 @@ class ProjectState {
         }
     }
     addProject(title, description, numOfPeople) {
-        const project = {
-            id: Math.random.toString(),
-            title: title,
-            description: description,
-            numOfPeople: numOfPeople
-        };
+        const project = new Project(Math.random.toString(), title, description, numOfPeople, ProjectStatus.Active);
         this.project.push(project);
         console.log("", project);
         for (const listener of this.listeners) {
@@ -138,38 +147,55 @@ __decorate([
     autobind
 ], ProjectInput.prototype, "submitHandler", null);
 const project = new ProjectInput();
-class ProjectList {
+class Component {
+    constructor(templateId, hostId, insertAtBegin, newElementId) {
+        this.templateElement = document.getElementById(templateId);
+        this.hostElement = document.getElementById(hostId);
+        const importNode = document.importNode(this.templateElement.content, true);
+        this.element = importNode.firstElementChild;
+        if (newElementId) {
+            this.element.id = newElementId;
+        }
+        this.attach(insertAtBegin);
+    }
+    attach(insertAtbegining) {
+        this.hostElement.insertAdjacentElement(insertAtbegining ? 'afterbegin' : 'beforeend', this.element);
+    }
+}
+class ProjectList extends Component {
     constructor(type) {
+        super('project-list', 'app', false, `${type}-projects`);
         this.type = type;
         this.assignedProject = [];
         this.assignedProject = [];
-        this.templateElement = document.getElementById("project-list");
-        this.hostElement = document.getElementById("app");
-        const importNode = document.importNode(this.templateElement.content, true);
-        this.element = importNode.firstElementChild;
-        this.element.id = `${type}-projects`;
-        projectState.addListener((projects) => {
-            this.assignedProject = projects;
-            this.renderProjects();
-        });
-        this.attach();
+        this.configure();
         this.renderContent();
     }
     renderProjects() {
         const listEl = document.getElementById(`${this.type}-projects-list`);
+        listEl.innerHTML = '';
         for (const item of this.assignedProject) {
             const itemDetails = document.createElement('li');
             itemDetails.textContent = item.title;
             listEl === null || listEl === void 0 ? void 0 : listEl.appendChild(itemDetails);
         }
     }
+    configure() {
+        projectState.addListener((projects) => {
+            const filterProject = projects.filter(item => {
+                if (this.type == "active") {
+                    return item.projectStatus == ProjectStatus.Active;
+                }
+                return item.projectStatus == ProjectStatus.Finished;
+            });
+            this.assignedProject = filterProject;
+            this.renderProjects();
+        });
+    }
     renderContent() {
         const itemId = `${this.type}-projects-list`;
         this.element.querySelector('ul').id = itemId;
         this.element.querySelector('h2').textContent = this.type.toUpperCase() + " PROJECTS";
-    }
-    attach() {
-        this.hostElement.insertAdjacentElement('beforeend', this.element);
     }
 }
 const projectActive = new ProjectList('active');
