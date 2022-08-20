@@ -101,11 +101,37 @@ class ProjectState {
 
 const projectState = ProjectState.getInstance()
 
-// ProjectInput class
-class ProjectInput {
+
+abstract class Component<T extends HTMLElement, U extends HTMLElement>{
     templateElement: HTMLTemplateElement
-    hostElement: HTMLDivElement
-    element: HTMLFormElement
+    hostElement: T
+    element: U
+    constructor(templateId: string,
+        hostId: string,
+        insertAtBegin: boolean,
+        newElementId?: string) {
+        this.templateElement = document.getElementById(templateId)! as HTMLTemplateElement
+        this.hostElement = document.getElementById(hostId)! as T
+
+        const importNode = document.importNode(this.templateElement.content, true)
+        this.element = importNode.firstElementChild as U
+        if (newElementId) {
+            this.element.id = newElementId
+        }
+        this.attach(insertAtBegin)
+    }
+
+    private attach(insertAtbegining: boolean) {
+        this.hostElement.insertAdjacentElement(insertAtbegining ? 'afterbegin' : 'beforeend', this.element)
+    }
+
+    abstract configure(): void
+    abstract renderContent(): void
+
+}
+
+// ProjectInput class
+class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
 
     titleInputField: HTMLInputElement
     descriptionInputField: HTMLInputElement
@@ -113,18 +139,13 @@ class ProjectInput {
 
 
     constructor() {
-        this.templateElement = document.getElementById("project-input")! as HTMLTemplateElement
-        this.hostElement = document.getElementById("app")! as HTMLDivElement
-
-        const importNode = document.importNode(this.templateElement.content, true)
-        this.element = importNode.firstElementChild as HTMLFormElement
-        this.element.id = "user-input"
+        super("project-input", 'app', true, "user-input")
 
         this.titleInputField = this.element.querySelector("#title") as HTMLInputElement
         this.descriptionInputField = this.element.querySelector("#description") as HTMLInputElement
         this.peopleInputField = this.element.querySelector("#people") as HTMLInputElement
         this.configure()
-        this.attach()
+        this.renderContent()
 
     }
 
@@ -162,9 +183,6 @@ class ProjectInput {
 
     }
 
-
-
-
     @autobind
     private submitHandler(event: Event) {
         event.preventDefault()
@@ -182,44 +200,17 @@ class ProjectInput {
         this.peopleInputField.value = ''
     }
 
-    private attach() {
-        this.hostElement.insertAdjacentElement('afterbegin', this.element)
+    renderContent(): void {
+
     }
 
-    private configure() {
+    configure() {
         this.element.addEventListener('submit', this.submitHandler)
     }
 }
 
 const project = new ProjectInput()
 
-abstract class Component<T extends HTMLElement, U extends HTMLElement>{
-    templateElement: HTMLTemplateElement
-    hostElement: T
-    element: U
-    constructor(templateId: string,
-        hostId: string,
-        insertAtBegin: boolean,
-        newElementId?: string) {
-        this.templateElement = document.getElementById(templateId)! as HTMLTemplateElement
-        this.hostElement = document.getElementById(hostId)! as T
-
-        const importNode = document.importNode(this.templateElement.content, true)
-        this.element = importNode.firstElementChild as U
-        if (newElementId) {
-            this.element.id = newElementId
-        }
-        this.attach(insertAtBegin)
-    }
-
-    private attach(insertAtbegining: boolean) {
-        this.hostElement.insertAdjacentElement(insertAtbegining ? 'afterbegin' : 'beforeend', this.element)
-    }
-
-    abstract configure(): void
-    abstract renderContent(): void
-
-}
 
 class ProjectList extends Component<HTMLDivElement, HTMLElement>{
 

@@ -79,19 +79,30 @@ class ProjectState {
     }
 }
 const projectState = ProjectState.getInstance();
-// ProjectInput class
-class ProjectInput {
-    constructor() {
-        this.templateElement = document.getElementById("project-input");
-        this.hostElement = document.getElementById("app");
+class Component {
+    constructor(templateId, hostId, insertAtBegin, newElementId) {
+        this.templateElement = document.getElementById(templateId);
+        this.hostElement = document.getElementById(hostId);
         const importNode = document.importNode(this.templateElement.content, true);
         this.element = importNode.firstElementChild;
-        this.element.id = "user-input";
+        if (newElementId) {
+            this.element.id = newElementId;
+        }
+        this.attach(insertAtBegin);
+    }
+    attach(insertAtbegining) {
+        this.hostElement.insertAdjacentElement(insertAtbegining ? 'afterbegin' : 'beforeend', this.element);
+    }
+}
+// ProjectInput class
+class ProjectInput extends Component {
+    constructor() {
+        super("project-input", 'app', true, "user-input");
         this.titleInputField = this.element.querySelector("#title");
         this.descriptionInputField = this.element.querySelector("#description");
         this.peopleInputField = this.element.querySelector("#people");
         this.configure();
-        this.attach();
+        this.renderContent();
     }
     getUserInput() {
         const enteredTitle = this.titleInputField.value;
@@ -136,8 +147,7 @@ class ProjectInput {
         this.descriptionInputField.value = '';
         this.peopleInputField.value = '';
     }
-    attach() {
-        this.hostElement.insertAdjacentElement('afterbegin', this.element);
+    renderContent() {
     }
     configure() {
         this.element.addEventListener('submit', this.submitHandler);
@@ -147,21 +157,6 @@ __decorate([
     autobind
 ], ProjectInput.prototype, "submitHandler", null);
 const project = new ProjectInput();
-class Component {
-    constructor(templateId, hostId, insertAtBegin, newElementId) {
-        this.templateElement = document.getElementById(templateId);
-        this.hostElement = document.getElementById(hostId);
-        const importNode = document.importNode(this.templateElement.content, true);
-        this.element = importNode.firstElementChild;
-        if (newElementId) {
-            this.element.id = newElementId;
-        }
-        this.attach(insertAtBegin);
-    }
-    attach(insertAtbegining) {
-        this.hostElement.insertAdjacentElement(insertAtbegining ? 'afterbegin' : 'beforeend', this.element);
-    }
-}
 class ProjectList extends Component {
     constructor(type) {
         super('project-list', 'app', false, `${type}-projects`);
