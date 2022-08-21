@@ -75,7 +75,7 @@ class ProjectState extends State {
         }
     }
     addProject(title, description, numOfPeople) {
-        const id = Math.random().toString();
+        const id = Math.random.toString();
         const project = new Project(id, title, description, numOfPeople, ProjectStatus.Active);
         this.project.push(project);
         this.updateListener();
