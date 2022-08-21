@@ -25,8 +25,8 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "outFile": "./dist/bundle.js",
-    "module": "amd",                                /* Specify what module code is generated. */
+    // "outFile": "./dist/bundle.js",
+    "module": "ES2015",                                /* Specify what module code is generated. */
     "rootDir": "./src/",                                  /* Specify the root folder within your source files. */
     "outDir": "./dist/",
     // "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
