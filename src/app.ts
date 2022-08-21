@@ -3,7 +3,6 @@
 /// <reference path='components/project-list.ts' />
 
 
-
 namespace App {
 
     const project = new ProjectInput()
