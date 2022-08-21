@@ -3,7 +3,7 @@ import { Project, ProjectStatus } from "../models/project"
 import { Component } from "./base-component"
 import { DragTarget } from "../models/drag-drop-interface"
 import { ProjectItem } from "./project-item"
-import { projectState } from "../state/project"
+import { projectState } from "../state/project-state"
 
 
 

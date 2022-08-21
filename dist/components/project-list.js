@@ -8,7 +8,7 @@ import { autobind } from "../decorator/autobind";
 import { ProjectStatus } from "../models/project";
 import { Component } from "./base-component";
 import { ProjectItem } from "./project-item";
-import { projectState } from "../state/project";
+import { projectState } from "../state/project-state";
 export class ProjectList extends Component {
     constructor(type) {
         super('project-list', 'app', false, `${type}-projects`);
