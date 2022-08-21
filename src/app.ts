@@ -1,114 +1,12 @@
-/// <reference path='drag-drop-interface/interface.ts' />
-/// <reference path='project-model.ts' />
+/// <reference path='models/drag-drop-interface.ts' />
+/// <reference path='models/project.ts' />
+/// <reference path='state/project.ts' />
+/// <reference path='utils/validation.ts' />
+/// <reference path='decorator/autobind.ts' />
+
+
 
 namespace App {
-
-    // decorator
-    function autobind(target: any, methodName: string, descriptor: PropertyDescriptor) {
-        const originalMethod = descriptor.value
-        const adjDescriptor: PropertyDescriptor = {
-            configurable: true,
-            get() {
-                const boundFn = originalMethod.bind(this)
-                return boundFn
-            },
-        }
-        return adjDescriptor
-    }
-
-    interface Validatable {
-        value: string | number
-        required?: boolean
-        minLength?: number
-        maxLength?: number
-        min?: number
-        max?: number
-    }
-
-    function validate(validatableInput: Validatable) {
-        let valid = true
-        if (validatableInput.required) {
-            valid = valid && validatableInput.value.toString().trim().length !== 0
-        }
-
-        if (validatableInput.minLength != null &&
-            typeof validatableInput.value === 'string') {
-            valid = valid && validatableInput.value.length > validatableInput.minLength
-        }
-
-        if (validatableInput.maxLength != null &&
-            typeof validatableInput.value === 'string') {
-            valid = valid && validatableInput.value.length < validatableInput.maxLength
-        }
-
-        if (validatableInput.min != null && typeof validatableInput.value === 'number') {
-            valid = valid && validatableInput.value > validatableInput.min
-        }
-
-        if (validatableInput.max != null && typeof validatableInput.value === 'number') {
-            valid = valid && validatableInput.value < validatableInput.max
-        }
-
-        return valid
-    }
-
-    type Listener<T> = (items: T[]) => void
-
-    class State<T>{
-        protected listeners: Listener<T>[] = []
-
-        addListener(listenerFun: Listener<T>) {
-            this.listeners.push(listenerFun)
-        }
-    }
-
-    class ProjectState extends State<Project> {
-        private project: Project[] = []
-        private static instance: ProjectState
-
-        constructor() {
-            super()
-        }
-
-        static getInstance() {
-            if (this.instance) {
-                return this.instance
-            } else {
-                this.instance = new ProjectState()
-                return this.instance
-            }
-        }
-
-        addProject(title: string, description: string, numOfPeople: number) {
-            const id = Math.random.toString()
-            const project = new Project(id,
-                title, description, numOfPeople, ProjectStatus.Active)
-
-            this.project.push(project)
-            this.updateListener()
-
-        }
-
-        moveProject(id: string, newStatus: ProjectStatus) {
-            const pro = this.project.find(item => item.id === id)
-            if (pro && pro.projectStatus != newStatus) {
-                pro.projectStatus = newStatus
-                this.updateListener()
-            }
-
-        }
-
-        updateListener() {
-            for (const listener of this.listeners) {
-                listener(this.project.slice())
-            }
-        }
-
-
-    }
-
-    const projectState = ProjectState.getInstance()
-
 
     abstract class Component<T extends HTMLElement, U extends HTMLElement>{
         templateElement: HTMLTemplateElement
