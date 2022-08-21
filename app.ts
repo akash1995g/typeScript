@@ -101,7 +101,8 @@ class ProjectState extends State<Project> {
     }
 
     addProject(title: string, description: string, numOfPeople: number) {
-        const project = new Project(Math.random().toString(),
+        const id = Math.random().toString()
+        const project = new Project(id,
             title, description, numOfPeople, ProjectStatus.Active)
 
         this.project.push(project)
@@ -262,8 +263,7 @@ class PrjectItem extends Component<HTMLUListElement, HTMLLIElement> implements D
     @autobind
     dragStartHandler(event: DragEvent): void {
 
-
-        event?.dataTransfer?.setData("text/plain", this.project.id)
+        event.dataTransfer!.setData("text/plain", this.project.id)
         event.dataTransfer!.effectAllowed = 'move'
 
     }

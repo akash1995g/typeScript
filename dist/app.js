@@ -75,7 +75,8 @@ class ProjectState extends State {
         }
     }
     addProject(title, description, numOfPeople) {
-        const project = new Project(Math.random().toString(), title, description, numOfPeople, ProjectStatus.Active);
+        const id = Math.random().toString();
+        const project = new Project(id, title, description, numOfPeople, ProjectStatus.Active);
         this.project.push(project);
         this.updateListener();
     }
@@ -187,8 +188,7 @@ class PrjectItem extends Component {
         }
     }
     dragStartHandler(event) {
-        var _a;
-        (_a = event === null || event === void 0 ? void 0 : event.dataTransfer) === null || _a === void 0 ? void 0 : _a.setData("text/plain", this.project.id);
+        event.dataTransfer.setData("text/plain", this.project.id);
         event.dataTransfer.effectAllowed = 'move';
     }
     dragEndhandler(_) {
