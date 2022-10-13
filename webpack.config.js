@@ -1,9 +1,9 @@
 var path = require("path")
 module.exports = {
-    entry: './src/app.js',
+    entry: './src/app.ts',
     output : {
         // filename: bundle.[contenthash].js, // for create dynamic bundle 
-        filename: bundle.js, // can be any name
+        filename: "bundle.js", // can be any name
         path: path.resolve(__dirname,"dist")
     },
     devtool:"inline-source-map",
@@ -17,6 +17,6 @@ module.exports = {
         ]
     },
     resolve:{
-        extension: [".ts",".js"]
+        extensions: [".ts",".js"]
     }
 }
