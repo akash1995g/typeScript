@@ -2,7 +2,7 @@ var path = require("path")
 module.exports = {
     entry: './src/app.ts',
     output : {
-        // filename: bundle.[contenthash].js, // for create dynamic bundle 
+        // filename: "bundle.[contenthash].js", // for create bundle hash for cache 
         filename: "bundle.js", // can be any name
         path: path.resolve(__dirname,"dist")
     },
