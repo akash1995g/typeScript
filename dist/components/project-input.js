@@ -5,9 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { autobind } from "../decorator/autobind.js";
-import { projectState } from "../state/project-state";
-import { validate } from "../utils/validation";
-import { Component } from "./base-component";
+import { projectState } from "../state/project-state.js";
+import { validate } from "../utils/validation.js";
+import { Component } from "./base-component.js";
 // ProjectInput class
 export class ProjectInput extends Component {
     constructor() {

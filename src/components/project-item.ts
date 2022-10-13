@@ -1,7 +1,7 @@
-import { autobind } from "../decorator/autobind"
-import { Project } from "../models/project"
-import { Component } from "./base-component"
-import { Draggable } from "../models/drag-drop-interface"
+import { autobind } from "../decorator/autobind.js"
+import { Project } from "../models/project.js"
+import { Component } from "./base-component.js"
+import { Draggable } from "../models/drag-drop-interface.js"
 
 
 
