@@ -1,15 +1,15 @@
 var path = require("path")
+var CleanPlugin = require("clean-webpack-plugin")
 module.exports = {
-    mode:"development",
+    mode:"production",
     entry: './src/app.ts',
     output : {
         // filename: "bundle.[contenthash].js", // for create bundle hash for cache 
         filename: "bundle.js", // can be any name
         path: path.resolve(__dirname,"dist"),
-        publicPath: '/dist/' // for webpack dev server
 
     },
-    devtool:"inline-source-map",
+    devtool:"none",
     module:{
         rules:[
             {
@@ -21,5 +21,8 @@ module.exports = {
     },
     resolve:{
         extensions: [".ts",".js"]
-    }
+    },
+    plugins:[
+        new CleanPlugin.CleanWebpackPlugin()
+    ]
 }
