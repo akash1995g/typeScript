@@ -1,8 +1,11 @@
 import React ,{useRef} from "react";
+import "./NewTodo.css"
+
 
 // interface NewTodoProps{ // interface or type can be used
 //     update : (enteredText:string) => void
 // }
+
 
 type NewTodoProps = {
     update : (enteredText:string) => void
@@ -19,7 +22,7 @@ const NewTodo: React.FC <NewTodoProps>= props => {
 
     } 
 
-    return (<form onSubmit={todoSubmitHandler}>
+    return (<form className= "form-control" onSubmit={todoSubmitHandler}>
         <div>
             <label htmlFor="todo-text">New Todo</label>
             <input type="text" id="todo-text" ref={textInputRef} />
