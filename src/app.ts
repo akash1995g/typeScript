@@ -1,13 +1,19 @@
+import 'reflect-metadata';
+import { plainToClass } from "class-transformer"
+import { Product } from "./product.model"
 
-import _ from "lodash"
+var products = [
+    { "name": "oooo", "price": 12.2 },
+    { "name": "uiiijij", "price": 19.2 }
+]
 
-declare var GLOBAL: any  // 
-
-
-
-console.log(_.shuffle([1, 2, 3]))
-
-console.log(GLOBAL)
+var list = plainToClass(Product, products)
 
 
 
+// var prod = new Product("jjjj", 2.3)
+
+
+for (const prod of list) {
+    console.log(prod.getInformation())
+}
